@@ -119,6 +119,20 @@ public final class Mapper {
         customMappers.add(new CustomMapperWrapper(customMapper));
         return this;
     }
+    
+    /**
+     * Add a custom bi mapper to the mapping process. This custom bi mapper will be called when
+     * the mapper will need to transform an object of type S to an object of type D or vice-versa
+     * @param customBiMapper Implement this interface to provide a mapping method from S to D and vice-versa.
+     * @param <S>          The source type.
+     * @param <D>          The destination type.
+     * @return The current mapper for chaining.
+     */
+    public <S, D> Mapper customBiMapper(CustomBiMapper<S, D> customBiMapper) {
+        customMappers.add(new CustomMapperWrapper<S, D>(customBiMapper.getStoDMapper()));
+        customMappers.add(new CustomMapperWrapper<D, S>(customBiMapper.getDtoSMapper()));
+        return this;
+    }
 
     /**
      * Map the source object with the destination class using the getters/setters.
